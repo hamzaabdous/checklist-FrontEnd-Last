@@ -571,9 +571,7 @@ export default {
     },
     dialogValideFunction() {
       this.dialogValide = true;
-      /* this.declareDamageAction(this.Data).then(() => {
-        console.log("validerDamages");
-      }); */
+  
     },
     validerDamages() {
       this.declareDamageAction(this.Data).then(() => {
@@ -593,7 +591,6 @@ export default {
               return e.id != item.id;
             });
             this.modelIT = [];
-           // console.log("damageSelect IT", item);
           } else if (item.department_id == TEC) {
             item.damage = this.DamageSelect;
             item.damage.status = "on progress";
