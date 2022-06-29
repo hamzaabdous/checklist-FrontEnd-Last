@@ -81,9 +81,8 @@ export default {
         { id: 1, name: "User", ROUTE: "/userGestion" },
         { id: 2, name: "Damage", ROUTE: "/Damage" },
         { id: 3, name: "Equipment Profile ", ROUTE: "/profile_groupe" },
-        { id: 4, name: "Foreman ", ROUTE: "/Foreman" },
-        { id: 5, name: "technique ", ROUTE: "/technique" },
-        { id: 6, name: "Dashboard ", ROUTE: "/Dashboard" },
+        { id: 4, name: "technique ", ROUTE: "/technique" },
+        { id: 5, name: "Dashboard ", ROUTE: "/Dashboard" },
       ],
     };
   },

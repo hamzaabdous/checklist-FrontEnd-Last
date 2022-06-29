@@ -120,7 +120,7 @@ const profilegroupModule = {
           profile_group_id: UserToProfileGroup.profile_group_id,
         })
           .then((response) => {
-            //   commit("ADD_PROFILEDROUP", response.data.payload);
+            //commit("ADD_PROFILEDROUP", response.data.payload);
             console.log(response.data.payload);
             resolve(response.data);
           })

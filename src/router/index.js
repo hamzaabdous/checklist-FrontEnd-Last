@@ -6,7 +6,6 @@ import DamageType from "../components/damage_Type/DamageType.vue";
 import Damage from "../components/damage/Damage.vue";
 import profile_groupe from "../components/profile_group/profile_groupe.vue";
 import ViewEquipement from "../components/ViewEquipement.vue";
-import ForemanView from "../components/foreman/ForemanView.vue";
 import userGestion from "../components/user/userGestion.vue";
 import technique from "../components/technique/technique.vue";
 import techniqueView from "../components/technique/techniqueView.vue";
@@ -59,13 +58,6 @@ const routes = [
     component: userGestion,
     params: true,
 
-
-  },
-  {
-    path: "/Foreman",
-    name: "Foreman",
-    component: ForemanView,
-    params: true,
 
   },
   {

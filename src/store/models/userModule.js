@@ -41,6 +41,12 @@ const usersModule = {
     DELETE_USER(state, user) {
       state.users = state.users.filter((c) => c.id != user.id);
     },
+    ADD_ProfileGroupUsers2(state, user) {
+      state.users.push(user);
+    },
+    DELETE_ProfileGroupUsers2(state, user) {
+      state.users = state.users.filter((c) => c.id != user.id);
+    },
     EDIT_USER(state, user) {
       state.users = state.users.map((c) => {
         if (c.id == user.id) return user;
@@ -59,6 +65,38 @@ const usersModule = {
             commit("SET_USERS", response.data.payload);
             console.log("set user ");
             resolve(response);
+          })
+          .catch((error) => {
+            reject(error);
+          });
+      });
+    },
+    deleteUserFromProfileGroupAction2({ commit }, profilegroup) {
+      return new Promise((resolve, reject) => {
+        CustomizedAxios.post("profilegroup/deleteUserFromProfileGroup", {
+          profile_group_id: profilegroup.profile_group_id,
+          user_id: profilegroup.user_id,
+        })
+          .then((response) => {
+            console.log("res",response.data.payload);
+           // commit("DELETE_PROFILEDROUP", profilegroup.id);
+            resolve(response.data);
+          })
+          .catch((error) => {
+            reject(error);
+          });
+      });
+    },
+    addUserToProfileGroupAction2({ commit }, UserToProfileGroup) {
+      return new Promise((resolve, reject) => {
+        CustomizedAxios.post("profilegroup/addUserToProfileGroup", {
+          user_id: UserToProfileGroup.user_id,
+          profile_group_id: UserToProfileGroup.profile_group_id,
+        })
+          .then((response) => {
+            //commit("ADD_PROFILEDROUP", response.data.payload);
+            console.log(response.data.payload);
+            resolve(response.data);
           })
           .catch((error) => {
             reject(error);
