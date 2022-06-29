@@ -114,9 +114,6 @@
                 <v-btn depressed color="" @click="dialog = false">
                   Close
                 </v-btn>
-                <v-btn depressed color="primary" @click="save(editedItem)">
-                  Save
-                </v-btn>
               </v-card-actions>
             </v-card>
           </v-dialog>
@@ -544,8 +541,8 @@ export default {
       "setDepartementsAction",
       "setFUNCTIONSAction",
       "setPROFILEDROUPSAction",
-      "addUserToProfileGroupAction",
-      "deleteUserFromProfileGroupAction",
+      "addUserToProfileGroupAction2",
+      "deleteUserFromProfileGroupAction2",
     ]),
     editItem(item) {
       this.editedIndex = this.users.indexOf(item) + 1;
@@ -621,16 +618,30 @@ export default {
       console.log("this.UserToProfile", this.UserToProfile);
     },
     deleteUserFromProfileGroup() {
-      this.deleteUserFromProfileGroupAction(this.UserToProfile).then(() => {
+      this.deleteUserFromProfileGroupAction2(this.UserToProfile).then(() => {
         this.profilegroupsActive = this.profilegroupsActive.filter((e) => {
-          return e.id != this.UserToProfile.profile_group_id;
+          if (e.id != this.UserToProfile.profile_group_id) {
+            return true;
+          } else {
+            var deletedProfileGroup = this.getprofilegroups.filter((e) => {
+              return e.id == this.UserToProfile.profile_group_id;
+            })[0];
+            this.profilegroupsFiltre.push(deletedProfileGroup);
+          }
         });
       });
       this.dialogprofilgroupToUser = false;
     },
     AddUserFromProfileGroup() {
-      this.addUserToProfileGroupAction(this.UserToProfile).then(() => {});
-      this.dialogprofilgroupToUser = false;
+      this.addUserToProfileGroupAction2(this.UserToProfile).then((user) => {
+        this.users = [...this.getUsers];
+        this.profilegroupsActive = user.profile_groups;
+        this.profilegroupsFiltre=this.profilegroupsFiltre.filter((e) => {
+              return e.id != this.UserToProfile.profile_group_id;
+            });
+
+      });
+      this.dialogAddprofilgroupToUser = false;
     },
     closeDelete() {
       this.dialogDelete = false;

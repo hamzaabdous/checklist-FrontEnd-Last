@@ -300,19 +300,6 @@ export default {
         });
       });
 
-      /* if (this.editedIndex == -1) {
-        console.log("add");
-        this.addUserAction(this.editedItem).then(() => {
-          this.users = [...this.getUsers];
-        });
-      } else {
-        console.log("edite");
-
-        this.editUserAction(this.editedItem).then(() => {
-          this.users = [...this.getUsers];
-        });
-      } */
-
       this.close();
     },
   },

@@ -203,7 +203,9 @@
               >
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn depressed color="" @click="dialogDelete= false">Cancel</v-btn>
+                <v-btn depressed color="" @click="dialogDelete = false"
+                  >Cancel</v-btn
+                >
                 <v-btn depressed color="error" @click="deleteDamage()"
                   >OK</v-btn
                 >
@@ -228,6 +230,7 @@
                 Damage Details:
               </v-card-title>
               <v-container class="DamageDetails">
+                
                 <v-row>
                   <v-col cols="9" sm="9" md="9">
                     <h4>
@@ -311,6 +314,39 @@
                     <h3>vvvvvv</h3>
                   </v-col>
                 </v-row>
+                <v-row>
+                  <template>
+                    <v-row>
+                      <v-col
+                        v-for="item in damageSelect.photos"
+                        :key="item.id"
+                        class="d-flex child-flex"
+                        cols="4"
+                      >
+                        <v-img
+                          max-height="150"
+                          max-width="200"
+                          :src="`http://localhost:8000/storage/cdn/damagePhotos/${item.filename}`"
+                          aspect-ratio="1"
+                          class="grey lighten-2"
+                        >
+                          <template v-slot:placeholder>
+                            <v-row
+                              class="fill-height ma-0"
+                              align="center"
+                              justify="center"
+                            >
+                              <v-progress-circular
+                                indeterminate
+                                color="grey lighten-5"
+                              ></v-progress-circular>
+                            </v-row>
+                          </template>
+                        </v-img>
+                      </v-col>
+                    </v-row>
+                  </template>
+                </v-row>
               </v-container>
               <v-card-actions>
                 <v-spacer></v-spacer>
@@ -371,7 +407,7 @@ export default {
     dialogimage: false,
     dialogresolve: false,
     dialogreverted: false,
-    dialogDelete:false,
+    dialogDelete: false,
     search: "",
     headers: [
       { text: "name", value: "damage_type.name", sortable: true },
@@ -516,9 +552,9 @@ export default {
       revertedBy_id: null,
       revertedDescription: "",
     },
-   Damagedelete:{
-        id: null,
-      },
+    Damagedelete: {
+      id: null,
+    },
     editedIndex: -1,
     editedItem: {
       id: null,
@@ -552,7 +588,6 @@ export default {
   },
   watch: {
     dialog(val) {},
-
   },
   created() {
     // this.initialize();
@@ -613,7 +648,7 @@ export default {
     },
     opendialogDelete(item) {
       this.dialogDelete = true;
-      this.Damagedelete.id=item.id;
+      this.Damagedelete.id = item.id;
     },
     confirmed() {
       this.confirmDamage.id = this.damageSelect.id;
@@ -648,7 +683,7 @@ export default {
           return e.id != this.Damagedelete.id;
         });
       });
-      this.dialogDelete= false;
+      this.dialogDelete = false;
     },
     sendImage() {
       this.photo.foreman_id = this.getUserActive.user.id;

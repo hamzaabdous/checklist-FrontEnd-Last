@@ -42,10 +42,21 @@ const usersModule = {
       state.users = state.users.filter((c) => c.id != user.id);
     },
     ADD_ProfileGroupUsers2(state, user) {
-      state.users.push(user);
-    },
-    DELETE_ProfileGroupUsers2(state, user) {
-      state.users = state.users.filter((c) => c.id != user.id);
+      state.users = state.users.map((c) => {
+        if (c.id == user.id) 
+          c.profile_groups=user.profile_groups;
+        return c;
+      });    },
+    DELETE_ProfileGroupUsers2(state, payload) {
+      console.log("pay ",payload);
+      state.users = state.users.map((c) => {
+        if (c.id == payload.user_id){
+          c.profile_groups=c.profile_groups.filter((e)=>{
+            return e.id!=payload.profile_group_id
+          });
+        } 
+        return c;
+      });
     },
     EDIT_USER(state, user) {
       state.users = state.users.map((c) => {
@@ -71,15 +82,12 @@ const usersModule = {
           });
       });
     },
-    deleteUserFromProfileGroupAction2({ commit }, profilegroup) {
+    deleteUserFromProfileGroupAction2({ commit }, payload) {
       return new Promise((resolve, reject) => {
-        CustomizedAxios.post("profilegroup/deleteUserFromProfileGroup", {
-          profile_group_id: profilegroup.profile_group_id,
-          user_id: profilegroup.user_id,
-        })
+        CustomizedAxios.post("profilegroup/deleteUserFromProfileGroup", payload)
           .then((response) => {
             console.log("res",response.data.payload);
-           // commit("DELETE_PROFILEDROUP", profilegroup.id);
+            commit("DELETE_ProfileGroupUsers2", payload);
             resolve(response.data);
           })
           .catch((error) => {
@@ -87,16 +95,13 @@ const usersModule = {
           });
       });
     },
-    addUserToProfileGroupAction2({ commit }, UserToProfileGroup) {
+    addUserToProfileGroupAction2({ commit }, payload) {
       return new Promise((resolve, reject) => {
-        CustomizedAxios.post("profilegroup/addUserToProfileGroup", {
-          user_id: UserToProfileGroup.user_id,
-          profile_group_id: UserToProfileGroup.profile_group_id,
-        })
+        CustomizedAxios.post("profilegroup/addUserToProfileGroup", payload)
           .then((response) => {
-            //commit("ADD_PROFILEDROUP", response.data.payload);
+            commit("ADD_ProfileGroupUsers2", response.data.payload);
             console.log(response.data.payload);
-            resolve(response.data);
+            resolve(response.data.payload);
           })
           .catch((error) => {
             reject(error);
