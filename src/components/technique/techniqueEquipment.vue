@@ -87,47 +87,130 @@
         sort-by="item.id"
         class="elevation-1"
       >
-     
         <template v-slot:top>
-           <v-dialog v-model="dialogimage" max-width="700px">
-          <v-card>
-            <v-toolbar dark color="primary">
-              <v-btn icon dark @click="dialogimage=false">
-                <v-icon>mdi-close</v-icon>
-              </v-btn>
-              <v-toolbar-title>Settings</v-toolbar-title>
-              <v-spacer></v-spacer>
-              <v-toolbar-items> </v-toolbar-items>
-            </v-toolbar>
+          <v-dialog v-model="dialogimage" max-width="700px">
+            <v-card>
+              <v-toolbar dark color="primary">
+                <v-btn icon dark @click="dialogimage = false">
+                  <v-icon>mdi-close</v-icon>
+                </v-btn>
+                <v-toolbar-title>Settings</v-toolbar-title>
+                <v-spacer></v-spacer>
+                <v-toolbar-items> </v-toolbar-items>
+              </v-toolbar>
 
-            <v-card-title class="text-h5"> Description : </v-card-title>
-            <v-col cols="12" md="12">
-              <v-textarea
-                solo
-                name="input-7-4"
-                label="Description"
-                v-model="photo.description"
-              ></v-textarea>
-            </v-col>
-            <v-card-title class="text-h5"> Add picture : </v-card-title>
-            <v-col cols="12" md="12">
-              <v-file-input
-                label="Pictures"
-                v-model="photo.photos"
-                filled
-                multiple
-                prepend-icon="mdi-camera"
-              ></v-file-input>
-            </v-col>
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn depressed color="" @click="dialogimage = false"> Close </v-btn>
-              <v-btn depressed color="primary" @click="sendImage()">
-                Save
-              </v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
+              <v-card-title class="text-h5"> Description : </v-card-title>
+              <v-col cols="12" md="12">
+                <v-textarea
+                  solo
+                  name="input-7-4"
+                  label="Description"
+                  v-model="photo.description"
+                ></v-textarea>
+              </v-col>
+              <v-card-title class="text-h5"> Add picture : </v-card-title>
+              <v-col cols="12" md="12">
+                <v-file-input
+                  label="Pictures"
+                  v-model="photo.photos"
+                  filled
+                  multiple
+                  prepend-icon="mdi-camera"
+                ></v-file-input>
+              </v-col>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn depressed color="" @click="dialogimage = false">
+                  Close
+                </v-btn>
+                <v-btn depressed color="primary" @click="sendImage()">
+                  Save
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+          <v-dialog v-model="dialogresolve" max-width="700px">
+            <v-card>
+              <v-toolbar dark color="primary">
+                <v-btn icon dark @click="dialogresolve = false">
+                  <v-icon>mdi-close</v-icon>
+                </v-btn>
+                <v-toolbar-title>Settings</v-toolbar-title>
+                <v-spacer></v-spacer>
+                <v-toolbar-items> </v-toolbar-items>
+              </v-toolbar>
+
+              <v-card-title class="text-h5"> Description : </v-card-title>
+              <v-col cols="12" md="12">
+                <v-textarea
+                  solo
+                  name="input-7-4"
+                  label="Description"
+                  v-model="confirmDamage.resolveDescription"
+                ></v-textarea>
+              </v-col>
+
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn depressed color="" @click="dialogresolve = false">
+                  Close
+                </v-btn>
+                <v-btn depressed color="primary" @click="confirmed()">
+                  Save
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+          <v-dialog v-model="dialogreverted" max-width="700px">
+            <v-card>
+              <v-toolbar dark color="primary">
+                <v-btn icon dark @click="dialogreverted = false">
+                  <v-icon>mdi-close</v-icon>
+                </v-btn>
+                <v-toolbar-title>Settings</v-toolbar-title>
+                <v-spacer></v-spacer>
+                <v-toolbar-items> </v-toolbar-items>
+              </v-toolbar>
+
+              <v-card-title class="text-h5"> Description : </v-card-title>
+              <v-col cols="12" md="12">
+                <v-textarea
+                  solo
+                  name="input-7-4"
+                  label="Description"
+                  v-model="revertDamage.revertedDescription"
+                ></v-textarea>
+              </v-col>
+
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn depressed color="" @click="dialogreverted = false">
+                  Close
+                </v-btn>
+                <v-btn depressed color="primary" @click="revert()">
+                  Save
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+          <v-dialog v-model="dialogDelete" max-width="600px">
+            <v-card>
+              <v-toolbar dark color="error">
+                <v-toolbar-title>Warning !</v-toolbar-title>
+              </v-toolbar>
+              <v-card-title class="text-h5"
+                >Are you sure you want to delete this Damage ?</v-card-title
+              >
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn depressed color="" @click="dialogDelete= false">Cancel</v-btn>
+                <v-btn depressed color="error" @click="deleteDamage()"
+                  >OK</v-btn
+                >
+                <v-spacer></v-spacer>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
           <v-dialog v-model="dialog" max-width="1000px">
             <v-card>
               <v-toolbar dark color="primary">
@@ -136,8 +219,8 @@
                 </v-btn>
                 <v-toolbar-title>Settings</v-toolbar-title>
                 <v-spacer></v-spacer>
-                <v-btn  color="blue-grey" @click="dialogimage=true">
-                  <v-icon color="white" medium> mdi-camera </v-icon>       
+                <v-btn color="blue-grey" @click="dialogimage = true">
+                  <v-icon color="white" medium> mdi-camera </v-icon>
                   Add pictures
                 </v-btn>
               </v-toolbar>
@@ -146,9 +229,6 @@
               </v-card-title>
               <v-container class="DamageDetails">
                 <v-row>
-                  <v-col cols="3" sm="3" md="3">
-                    <h3>Description :</h3>
-                  </v-col>
                   <v-col cols="9" sm="9" md="9">
                     <h4>
                       {{ damageSelect.description }}
@@ -222,16 +302,25 @@
               <v-card-title class="text-h5 blue--text text--darken-3">
                 photos :
               </v-card-title>
-
+              <v-container class="DamageDetails">
+                <v-row>
+                  <v-col cols="6" sm="6" md="6">
+                    <h3>Description :</h3>
+                  </v-col>
+                  <v-col cols="6" sm="6" md="6">
+                    <h3>vvvvvv</h3>
+                  </v-col>
+                </v-row>
+              </v-container>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn depressed color="primary" @click="confirmed">
+                <v-btn depressed color="primary" @click="opendialogresolve">
                   Confirme damage
                 </v-btn>
                 <v-btn depressed color="red" @click="closed">
                   Close damage
                 </v-btn>
-                <v-btn depressed color="red" @click="revert">
+                <v-btn depressed color="red" @click="opendialogreverted">
                   Revert damage
                 </v-btn>
               </v-card-actions>
@@ -256,6 +345,13 @@
           >
             <v-icon medium class="mr-2"> mdi-eye-outline </v-icon>
           </v-btn>
+          <v-btn
+            color="red"
+            class="mr-2 btn white--text"
+            @click="opendialogDelete(item)"
+          >
+            <v-icon medium class="mr-2"> mdi-delete </v-icon>
+          </v-btn>
         </template>
         <template v-slot:no-data>
           <v-btn color="primary" @click="initialize()"> Reset </v-btn>
@@ -273,9 +369,12 @@ export default {
     dialogDelete: false,
     loading: false,
     dialogimage: false,
+    dialogresolve: false,
+    dialogreverted: false,
+    dialogDelete:false,
     search: "",
     headers: [
-      { text: "Description", value: "description", sortable: true },
+      { text: "name", value: "damage_type.name", sortable: true },
       { text: "Status", value: "status", sortable: true },
       { text: "Created By", value: "declared_by.username", sortable: true },
       { text: "Closed By", value: "closed_by.name", sortable: true },
@@ -406,6 +505,7 @@ export default {
     confirmDamage: {
       id: null,
       confirmedBy_id: null,
+      resolveDescription: "",
     },
     closeDamage: {
       id: null,
@@ -414,7 +514,11 @@ export default {
     revertDamage: {
       id: null,
       revertedBy_id: null,
+      revertedDescription: "",
     },
+   Damagedelete:{
+        id: null,
+      },
     editedIndex: -1,
     editedItem: {
       id: null,
@@ -443,14 +547,12 @@ export default {
       "getDamageTypeByEquipmentID",
       "getEquipmentsByCounter",
       "sendDamagePhotosStoragePath",
-      "getUserActive"
+      "getUserActive",
     ]),
   },
   watch: {
     dialog(val) {},
-    dialogDelete(val) {
-      val || this.closeDelete();
-    },
+
   },
   created() {
     // this.initialize();
@@ -489,6 +591,7 @@ export default {
       "closeDamageAction",
       "revertDamageAction",
       "sendDamagePhotosStoragePathAction",
+      "deleteDAMAGEAction",
     ]),
     pageView(item) {
       this.damageSelect = item;
@@ -502,17 +605,29 @@ export default {
       this.showdetails = false;
       this.dialog = false;
     },
+    opendialogresolve() {
+      this.dialogresolve = true;
+    },
+    opendialogreverted() {
+      this.dialogreverted = true;
+    },
+    opendialogDelete(item) {
+      this.dialogDelete = true;
+      this.Damagedelete.id=item.id;
+    },
     confirmed() {
       this.confirmDamage.id = this.damageSelect.id;
-      this.confirmDamage.confirmedBy_id = localStorage.getItem("userid");
+      this.confirmDamage.confirmedBy_id = this.getUserActive.user.id;
 
       this.confirmDamageAction(this.confirmDamage).then(() => {});
       this.showdetails = false;
+      this.dialogresolve = false;
+
       this.dialog = false;
     },
     closed() {
       this.closeDamage.id = this.damageSelect.id;
-      this.closeDamage.closedBy_id = localStorage.getItem("userid");
+      this.closeDamage.closedBy_id = this.getUserActive.user.id;
 
       this.closeDamageAction(this.closeDamage).then(() => {});
       this.showdetails = false;
@@ -520,11 +635,20 @@ export default {
     },
     revert() {
       this.revertDamage.id = this.damageSelect.id;
-      this.revertDamage.revertedBy_id = localStorage.getItem("userid");
+      this.revertDamage.revertedBy_id = this.getUserActive.user.id;
 
       this.revertDamageAction(this.revertDamage).then(() => {});
       this.showdetails = false;
+      this.dialogreverted = false;
       this.dialog = false;
+    },
+    deleteDamage() {
+      this.deleteDAMAGEAction(this.Damagedelete).then(() => {
+        this.damageByEquipments = this.damageByEquipments.filter((e) => {
+          return e.id != this.Damagedelete.id;
+        });
+      });
+      this.dialogDelete= false;
     },
     sendImage() {
       this.photo.foreman_id = this.getUserActive.user.id;
@@ -543,11 +667,11 @@ export default {
 
       console.log("this.photo", this.photo);
       this.sendDamagePhotosStoragePathAction(formData).then(() => {
-       // this.foremanIntervention = [...this.sendDamagePhotosStoragePath];
-         console.log("done");
-       });
-     // console.log("itemTEC", this.foremanIntervention);
-    //  this.dialogimage = false;
+        // this.foremanIntervention = [...this.sendDamagePhotosStoragePath];
+        console.log("done");
+      });
+      // console.log("itemTEC", this.foremanIntervention);
+      //  this.dialogimage = false;
 
       /* CustomizedAxios.post("damages/foremanIntervention", formData)
         .then((res) => {

@@ -70,6 +70,7 @@ const damageTypeModule = {
         CustomizedAxios.post("damages/confirmDamage", {
           id: damage.id,
           confirmedBy_id: damage.confirmedBy_id,
+          resolveDescription:damage.resolveDescription,
         })
           .then((response) => {
             console.log("res confirmDamage ", response.data.payload);
@@ -103,6 +104,7 @@ const damageTypeModule = {
         CustomizedAxios.post("damages/revertDamage", {
           id: damage.id,
           revertedBy_id: damage.revertedBy_id,
+          revertedDescription:damage.revertedDescription,
         })
           .then((response) => {
             console.log("res revertDamage ", response.data.payload);
@@ -126,12 +128,12 @@ const damageTypeModule = {
           });
       });
     },
-    deleteDAMAGEAction({ commit }, id) {
+    deleteDAMAGEAction({ commit }, damage) {
       return new Promise((resolve, reject) => {
-        CustomizedAxios.post("damages/delete/" + id)
+        CustomizedAxios.post("damages/delete/",damage)
           .then((response) => {
-            commit("DELETE_DAMAGE", id);
-            resolve(response.data);
+            commit("DELETE_DAMAGE", damage.id);
+            resolve(response.data.payload);
           })
           .catch((error) => {
             reject(error);

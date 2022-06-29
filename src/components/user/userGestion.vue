@@ -121,42 +121,106 @@
             </v-card>
           </v-dialog>
 
-          <v-dialog v-model="dialogediteUserToProfilegroup" max-width="700px">
+          <v-dialog v-model="dialogediteUserToProfilegroup" max-width="600px">
             <v-card>
               <v-toolbar dark color="primary">
-                <v-btn icon dark @click="dialogediteUserToProfilegroup=false">
+                <v-btn icon dark @click="dialogediteUserToProfilegroup = false">
                   <v-icon>mdi-close</v-icon>
                 </v-btn>
                 <v-toolbar-title>Profile Group</v-toolbar-title>
                 <v-spacer></v-spacer>
                 <v-toolbar-items> </v-toolbar-items>
               </v-toolbar>
-              <v-card-title class="text-h5 grey--text text--darken-3">
-                ccccc Profile :
-              </v-card-title>
               <v-container>
                 <v-row>
-                 
-                 <v-col cols="12">
-                      <v-col class="d-flex" cols="12" sm="12">
-                        <v-select
-                          :items="profilegroups"
-                          item-text="name"
-                          item-value="id"
-                          v-model="UserToProfile.profile_group_id"
-                          label="Profil group"
-                        ></v-select>
-                      </v-col>
-                    </v-col>
+                  <div style="padding: 22px; padding-top: 4%">
+                    <v-data-table
+                      :headers="headersProfilegroup"
+                      :items="profilegroupsActive"
+                      :search="search"
+                      sort-by="item.id"
+                      class="elevation-1"
+                    >
+                      <template v-slot:top>
+                        <template>
+                          <v-btn color="#002f6c" class="mb-2 btn white--text">
+                            <v-icon left> mdi-account-multiple-plus </v-icon>
+                            Add
+                          </v-btn>
+                        </template>
+                        <v-dialog
+                          v-model="dialogprofilgroupToUser"
+                          max-width="700px"
+                        >
+                          <v-card>
+                            <v-toolbar dark color="error">
+                              <v-toolbar-title>Warning !</v-toolbar-title>
+                            </v-toolbar>
+                            <v-card-title class="text-h5"
+                              >Are you sure you want to delete this
+                              user?</v-card-title
+                            >
+                            <v-card-actions>
+                              <v-spacer></v-spacer>
+                              <v-btn depressed color="" @click="dialogprofilgroupToUser = false"
+                                >Cancel</v-btn
+                              >
+                              <v-btn
+                                depressed
+                                color="error"
+                                @click="deleteUserFromProfileGroup"
+                                >OK</v-btn
+                              >
+                              <v-spacer></v-spacer>
+                            </v-card-actions>
+                          </v-card>
+                        </v-dialog>
+                        <v-toolbar flat>
+                          <v-text-field
+                            v-model="search"
+                            append-icon="mdi-magnify"
+                            label="Search"
+                            single-line
+                            hide-details
+                          ></v-text-field>
+                          <v-spacer></v-spacer>
+                        </v-toolbar>
+                      </template>
+                      <template v-slot:[`item.actions`]="{ item }">
+                        <v-btn
+                          color="red"
+                          class="mr-2 btn white--text"
+                          @click="opendialogDelete(item)"
+                        >
+                          <v-icon medium class="mr-2"> mdi-delete </v-icon>
+                        </v-btn>
+                      </template>
+                      <template v-slot:no-data>
+                        <v-btn color="primary" @click="initialize()">
+                          Reset
+                        </v-btn>
+                      </template>
+                    </v-data-table>
+                  </div>
                 </v-row>
               </v-container>
-              <v-container>
-  
-              </v-container>
+              <v-container> </v-container>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn depressed color="" @click="dialogediteUserToProfilegroup=false"> Close </v-btn>
-                <v-btn depressed color="primary" @click="SaveUserToProfilegroupItem()"> Save </v-btn>
+                <v-btn
+                  depressed
+                  color=""
+                  @click="dialogediteUserToProfilegroup = false"
+                >
+                  Close
+                </v-btn>
+                <v-btn
+                  depressed
+                  color="primary"
+                  @click="SaveUserToProfilegroupItem()"
+                >
+                  Save
+                </v-btn>
               </v-card-actions>
             </v-card>
           </v-dialog>
@@ -306,7 +370,8 @@ export default {
     dialogModifier: false,
     showInput: false,
     showInputDepartment: false,
-    dialogediteUserToProfilegroup:false,
+    dialogediteUserToProfilegroup: false,
+    dialogprofilgroupToUser: false,
     search: "",
     loading: "false",
     headers: [
@@ -316,8 +381,16 @@ export default {
       { text: "email", value: "email", sortable: true },
       { text: "Actions", value: "actions", sortable: false },
     ],
+    headersProfilegroup: [
+      { text: "Name", value: "name", align: "start", sortable: true },
+      { text: "Created at", value: "pivot.created_at", sortable: true },
+
+      { text: "Actions", value: "actions", sortable: false },
+    ],
     users: [],
-    profilegroups:[],
+    profilegroups: [],
+    profilegroupsActive: [],
+    profilegroupsFiltre: [],
     UserToProfile: {
       user_id: null,
       profile_group_id: null,
@@ -376,7 +449,12 @@ export default {
     formTitle() {
       return this.editedIndex === -1 ? "New Item" : "Edit Item";
     },
-    ...mapGetters(["getUsers", "getdepartements", "getfunctions","getprofilegroups"]),
+    ...mapGetters([
+      "getUsers",
+      "getdepartements",
+      "getfunctions",
+      "getprofilegroups",
+    ]),
   },
   watch: {
     dialog(val) {
@@ -419,6 +497,7 @@ export default {
       "setFUNCTIONSAction",
       "setPROFILEDROUPSAction",
       "addUserToProfileGroupAction",
+      "deleteUserFromProfileGroupAction",
     ]),
     editItem(item) {
       this.editedIndex = this.users.indexOf(item) + 1;
@@ -427,15 +506,25 @@ export default {
       this.dialogModifier = true;
     },
     editeUserToProfilegroupItem(item) {
+      this.profilegroupsActive = [];
+      this.UserToProfile.user_id=item.id;
+
       this.editedIndex = this.users.indexOf(item) + 1;
       this.editedItem = Object.assign({}, item);
-     // this.profilegroups.user_id=item.id;
-    //  console.log("userid",this.profilegroups.user_id);
+      this.profilegroupsActive = item.profile_groups;
+
+      this.profilegroupsFiltre = this.profilegroups.filter((e) => {
+        var exist = this.profilegroupsActive.filter((i) => {
+          return i.id == e.id;
+        });
+        return exist.length == 0;
+      });
+
       this.dialogediteUserToProfilegroup = true;
     },
     SaveUserToProfilegroupItem() {
-      this.UserToProfile.user_id=this.editedItem.id;
-        this.addUserToProfileGroupAction(this.UserToProfile).then(() => {
+      this.UserToProfile.user_id = this.editedItem.id;
+      this.addUserToProfileGroupAction(this.UserToProfile).then(() => {
         console.log("done ");
       });
       this.dialogediteUserToProfilegroup = false;
@@ -477,6 +566,19 @@ export default {
           },
         },
       };
+    },
+    opendialogDelete(item) {
+      this.UserToProfile.profile_group_id=item.id;
+      this.dialogprofilgroupToUser = true;
+      console.log("this.UserToProfile", this.UserToProfile);
+    },
+    deleteUserFromProfileGroup() {
+      this.deleteUserFromProfileGroupAction(this.UserToProfile).then(() => {
+         this.profilegroupsActive = this.profilegroupsActive.filter((e) => {
+        return e.id != this.UserToProfile.profile_group_id;
+      });
+      });
+      this.dialogprofilgroupToUser = false;
     },
     closeDelete() {
       this.dialogDelete = false;
