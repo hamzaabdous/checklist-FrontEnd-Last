@@ -114,6 +114,9 @@
                 <v-btn depressed color="" @click="dialog = false">
                   Close
                 </v-btn>
+                 <v-btn depressed color="primary" @click="save()">
+                  Save
+                </v-btn>
               </v-card-actions>
             </v-card>
           </v-dialog>

@@ -384,12 +384,12 @@
               <v-btn
                 class="mr-2 white--text"
                 color="red"
-                @click="downloadImage()"
               >
                 <v-icon medium class="mr-2">mdi-folder-image</v-icon>
                 <a
                   :href="`http://localhost:8000/storage/cdn/damagePhotos/${PhotoShow.filename}`"
-                  :download="PhotoShow.filename"
+                  download
+                  target="_blank"
                 >
                   download picture</a
                 >
