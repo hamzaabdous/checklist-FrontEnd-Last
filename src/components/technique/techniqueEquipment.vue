@@ -213,7 +213,7 @@
               </v-card-actions>
             </v-card>
           </v-dialog>
-          <v-dialog v-model="dialog" max-width="1000px">
+          <v-dialog v-model="dialog" max-width="1200px">
             <v-card>
               <v-toolbar dark color="primary">
                 <v-btn icon dark @click="closedtailedialoge">
@@ -229,94 +229,100 @@
               <v-card-title class="text-h5 blue--text text--darken-3">
                 Damage Details:
               </v-card-title>
-              <v-container class="DamageDetails">
-                
+              <v-container>
                 <v-row>
-                  <v-col cols="9" sm="9" md="9">
-                    <h4>
-                      {{ damageSelect.description }}
-                    </h4>
-                  </v-col>
-                </v-row>
-                <v-row>
-                  <v-col cols="3" sm="3" md="3">
-                    <h3>Status :</h3>
-                  </v-col>
-                  <v-col cols="6" sm="6" md="6">
-                    <h4>
-                      {{ damageSelect.status }}
-                    </h4>
-                  </v-col>
-                </v-row>
-                <v-row>
-                  <v-col cols="3" sm="3" md="3">
-                    <h3>declaredAt :</h3>
-                  </v-col>
-                  <v-col cols="6" sm="6" md="6">
-                    <h4>
-                      {{ damageSelect.declaredAt }}
-                    </h4>
-                  </v-col>
-                </v-row>
+                  <v-col>
+                    <table class="DamageDetails">
+                      <tbody>
+                        <tr>
+                          <td><h3>DamageType</h3></td>
+                          <td class="valueColumn">
+                            <h4>{{ damageSelect.damage_type.name }}</h4>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td><h3>Description</h3></td>
+                          <td class="valueColumn">
+                            <h5 v-if="damageSelect.description == null">
+                              Empty
+                            </h5>
 
-                <v-row>
-                  <v-col cols="3" sm="3" md="3">
-                    <h3>closedAt :</h3>
-                  </v-col>
-                  <v-col cols="6" sm="6" md="6">
-                    <h4>
-                      {{ damageSelect.closedAt }}
-                    </h4>
-                  </v-col>
-                </v-row>
+                            <h4 v-else>{{ damageSelect.description }}</h4>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td><h3>Status</h3></td>
+                          <td class="valueColumn">
+                            <h5 v-if="damageSelect.status == null">Empty</h5>
 
-                <v-row>
-                  <v-col cols="3" sm="3" md="3">
-                    <h3>revertedTimes :</h3>
-                  </v-col>
-                  <v-col cols="6" sm="6" md="6">
-                    <h4>
-                      {{ damageSelect.revertedTimes }}
-                    </h4>
-                  </v-col>
-                </v-row>
+                            <h4 v-else>{{ damageSelect.status }}</h4>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td><h3>Declared At</h3></td>
+                          <td class="valueColumn">
+                            <h5 v-if="damageSelect.declaredAt == null">
+                              Empty
+                            </h5>
 
-                <v-row>
-                  <v-col cols="3" sm="3" md="3">
-                    <h3>updated at :</h3>
-                  </v-col>
-                  <v-col cols="6" sm="6" md="6">
-                    <h4>
-                      {{ damageSelect.updated_at }}
-                    </h4>
-                  </v-col>
-                </v-row>
-                <v-row>
-                  <v-col cols="3" sm="3" md="3">
-                    <h3>created at :</h3>
-                  </v-col>
-                  <v-col cols="6" sm="6" md="6">
-                    <h4>
-                      {{ damageSelect.created_at }}
-                    </h4>
+                            <h4 v-else>{{ damageSelect.declaredAt }}</h4>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td><h3>Closed At</h3></td>
+                          <td class="valueColumn">
+                            <h5 v-if="damageSelect.closedAt == null">Empty</h5>
+
+                            <h4 v-else>{{ damageSelect.closedAt }}</h4>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td><h3>Reverted Times</h3></td>
+                          <td class="valueColumn">
+                            <h5 v-if="damageSelect.revertedTimes == null">
+                              Empty
+                            </h5>
+
+                            <h4 v-else>{{ damageSelect.revertedTimes }}</h4>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td><h3>Updated at</h3></td>
+                          <td class="valueColumn">
+                            <h5 v-if="damageSelect.updated_at == null">
+                              Empty
+                            </h5>
+
+                            <h4 v-else>{{ damageSelect.updated_at }}</h4>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td><h3>Created at</h3></td>
+                          <td class="valueColumn">
+                            <h5 v-if="damageSelect.created_at == null">
+                              Empty
+                            </h5>
+
+                            <h4 v-else>{{ damageSelect.created_at }}</h4>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
                   </v-col>
                 </v-row>
               </v-container>
               <v-card-title class="text-h5 blue--text text--darken-3">
-                photos :
+                Photos :
               </v-card-title>
               <v-container class="DamageDetails">
-                <v-row>
-                  <v-col cols="6" sm="6" md="6">
-                    <h3>Description :</h3>
-                  </v-col>
-                  <v-col cols="6" sm="6" md="6">
-                    <h3>vvvvvv</h3>
-                  </v-col>
-                </v-row>
-                <v-row>
+                <v-row class="photos">
                   <template>
-                    <v-row>
+                    <v-row v-if="damageSelect.photos.length == 0">
+                      <v-col cols="4">
+                        <h5>Empty</h5>
+                      </v-col>
+                    </v-row>
+                    <v-row v-else>
                       <v-col
                         v-for="item in damageSelect.photos"
                         :key="item.id"
@@ -328,7 +334,8 @@
                           max-width="200"
                           :src="`http://localhost:8000/storage/cdn/damagePhotos/${item.filename}`"
                           aspect-ratio="1"
-                          class="grey lighten-2"
+                          class="grey lighten-2 imageRadius"
+                          @click="showImage(item)"
                         >
                           <template v-slot:placeholder>
                             <v-row
@@ -360,6 +367,43 @@
                   Revert damage
                 </v-btn>
               </v-card-actions>
+            </v-card>
+          </v-dialog>
+          <v-dialog
+            v-model="dialogimageShow"
+            fullscreen
+            hide-overlay
+            transition="dialog-bottom-transition"
+          >
+            <v-toolbar dark color="primary">
+              <v-btn icon dark @click="dialogimageShow = false">
+                <v-icon>mdi-close</v-icon>
+              </v-btn>
+              <v-toolbar-title>Picture</v-toolbar-title>
+              <v-spacer></v-spacer>
+              <v-btn
+                class="mr-2 white--text"
+                color="red"
+                @click="downloadImage()"
+              >
+                <v-icon medium class="mr-2">mdi-folder-image</v-icon>
+                <a
+                  :href="`http://localhost:8000/storage/cdn/damagePhotos/${PhotoShow.filename}`"
+                  :download="PhotoShow.filename"
+                >
+                  download picture</a
+                >
+              </v-btn>
+            </v-toolbar>
+            <v-card>
+              <div class="p-100">
+                <v-img
+                  :lazy-src="`http://localhost:8000/storage/cdn/damagePhotos/${PhotoShow.filename}`"
+                  max-height="90%"
+                  max-width="100%"
+                  :src="`http://localhost:8000/storage/cdn/damagePhotos/${PhotoShow.filename}`"
+                ></v-img>
+              </div>
             </v-card>
           </v-dialog>
           <v-toolbar flat>
@@ -408,6 +452,7 @@ export default {
     dialogresolve: false,
     dialogreverted: false,
     dialogDelete: false,
+    dialogimageShow: false,
     search: "",
     headers: [
       { text: "name", value: "damage_type.name", sortable: true },
@@ -420,6 +465,14 @@ export default {
     damageByEquipments: [],
     equipmentsFiltre: [],
     showdetails: false,
+    PhotoShow: {
+      id: null,
+      description: null,
+      filename: "",
+      damage_id: null,
+      created_at: "",
+      updated_at: "",
+    },
     photo: {
       id: "",
       description: "",
@@ -685,6 +738,11 @@ export default {
       });
       this.dialogDelete = false;
     },
+    showImage(item) {
+      console.log("image click", item);
+      this.PhotoShow = item;
+      this.dialogimageShow = true;
+    },
     sendImage() {
       this.photo.foreman_id = this.getUserActive.user.id;
 
@@ -705,16 +763,7 @@ export default {
         // this.foremanIntervention = [...this.sendDamagePhotosStoragePath];
         console.log("done");
       });
-      // console.log("itemTEC", this.foremanIntervention);
-      //  this.dialogimage = false;
-
-      /* CustomizedAxios.post("damages/foremanIntervention", formData)
-        .then((res) => {
-          console.log(res);
-        })
-        .catch((err) => {
-          console.log(err);
-        }); */
+      this.dialogimage = false;
     },
   },
 };
