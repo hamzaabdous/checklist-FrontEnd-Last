@@ -45,12 +45,8 @@
 
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" text @click="close(item)">
-                  Cancel
-                </v-btn>
-                <v-btn color="blue darken-1" text @click="save(editedItem)">
-                  Save
-                </v-btn>
+                <v-btn color="" @click="close(item)">Cancel</v-btn>
+                <v-btn color="primary" @click="save(editedItem)">Save</v-btn>
               </v-card-actions>
             </v-card>
           </v-dialog>
@@ -77,7 +73,7 @@
       <template v-slot:[`item.actions`]="{ item }">
         <v-btn
           color="primary"
-          class="mb-2 btn white--text"
+          class="ml-2 m-2 btn white--text"
           @click="editItem(item)"
         >
           <v-icon medium class="mr-2"> mdi-pencil </v-icon>
@@ -85,7 +81,7 @@
 
         <v-btn
           color="#f45"
-          class="mb-2 btn white--text"
+          class="ml-2 m-2 btn white--text"
           @click="deleteItem(item)"
         >
           <v-icon medium> mdi-delete </v-icon>
@@ -142,6 +138,14 @@ export default {
   watch: {
     dialog(val) {
       val || this.close();
+      if (!val) {
+        this.editedIndex = -1;
+        this.editedItem = {
+          id: null,
+          name: "",
+          profile_group_id: "",
+        };
+      }
     },
     dialogDelete(val) {
       val || this.closeDelete();
@@ -184,7 +188,7 @@ export default {
           return e.id != this.editedItem.id;
         });
       });
-      this.editedIndex =-1;
+      this.editedIndex = -1;
       this.closeDelete();
     },
     close() {

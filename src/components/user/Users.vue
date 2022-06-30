@@ -245,7 +245,13 @@ export default {
         console.log("this.users", this.users);
       });
       this.setUsersAction(localStorage.getItem("id")).then(() => {
-        this.usersSelect = [...this.getUsers];
+        this.usersSelect = this.getUsers.filter((user)=>{
+          var exist= this.users.filter((user2)=>{
+            return user.id==user2.id;
+          });
+          return exist.length==0;
+        });
+      
         console.log("this.users", this.usersSelect);
       });
     },
@@ -273,12 +279,17 @@ export default {
       //console.log("UserToProfile",this.UserToProfile);
       this.deleteUserFromProfileGroupAction(this.UserToProfile).then(() => {
         this.users = this.users.filter((e) => {
+          if (e.id == this.UserToProfile.user_id) {
+            console.log("Us",e);
+            this.usersSelect.push(e);
+          }
           return e.id != this.UserToProfile.user_id;
         });
       });
       this.closeDelete();
     },
     close() {
+      
       this.dialog = false;
     },
     closemodifier() {
@@ -286,6 +297,9 @@ export default {
     },
     closeDelete() {
       this.dialogDelete = false;
+    },
+    usersSelectchange(){
+      
     },
     save() {
       console.log("this.UserToProfile", this.UserToProfile);

@@ -33,9 +33,14 @@ const damageTypeModule = {
     getEquipmentDamagesMergedWithDamageTypes(state, damages) {
       state.getEquipmentDamagesMergedWithDamageTypes = damages;
     },
-    sendDamagePhotosStoragePath(state, foremanIntervention) {
-      state.foremanIntervention.push(foremanIntervention);
-    },
+    sendDamagePhotosStoragePath(state, damage) {
+      state.damages = state.damages.map((c) => {
+        if (c.id == damage.id){
+          c.photos=damage.photos;
+          c.description=damage.description;
+        }
+        return c;
+      });    },
   },
   actions: {
     setDAMAGEAction({ commit }) {
@@ -75,8 +80,8 @@ const damageTypeModule = {
           .then((response) => {
             console.log("res confirmDamage ", response.data.payload);
 
-       //     commit("EDIT_DAMAGE", response.data.payload);
-            resolve(response.data);
+            commit("EDIT_DAMAGE", response.data.payload);
+            resolve(response.data.payload);
           })
           .catch((error) => {
             reject(error);
@@ -91,8 +96,8 @@ const damageTypeModule = {
         })
           .then((response) => {
             console.log("res closeDamage ", response.data.payload);
-            //commit("EDIT_DAMAGE", response.data.payload);
-            resolve(response.data);
+            commit("EDIT_DAMAGE", response.data.payload);
+            resolve(response.data.payload);
           })
           .catch((error) => {
             reject(error);
@@ -108,8 +113,8 @@ const damageTypeModule = {
         })
           .then((response) => {
             console.log("res revertDamage ", response.data.payload);
-          //  commit("EDIT_DAMAGE", response.data.payload);
-            resolve(response.data);
+            commit("EDIT_DAMAGE", response.data.payload);
+            resolve(response.data.payload);
           })
           .catch((error) => {
             reject(error);

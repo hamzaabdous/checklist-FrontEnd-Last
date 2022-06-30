@@ -25,36 +25,39 @@
             ></v-select>
           </v-col>
         </v-row>
-        <v-dialog v-model="dialog" persistent max-width="490">
+        <v-dialog v-model="dialog" persistent max-width="600px">
           <v-card>
+            <v-toolbar dark color="error">
+                              <v-toolbar-title>Warning !</v-toolbar-title>
+                            </v-toolbar>
             <v-card-title
-              class="text text-h5 red--text text--lighten-1 text-uppercase"
+              class="text-h5"
             >
-              Warning !
+              Are you sure you want to valide this Damages ?
             </v-card-title>
-            <v-card-text class="font-weight-bold"
-              >Are you sure you want to add this damage ?</v-card-text
-            >
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn color="red lighten-1" @click="cancel"> No </v-btn>
+              <v-btn color="white" @click="cancel"> No </v-btn>
               <v-btn color="primary" @click="dialog = false"> Yes </v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
-        <v-dialog v-model="dialogValide" persistent max-width="490">
+        <v-dialog v-model="dialogValide" persistent max-width="600px">
           <v-card>
+            <v-toolbar dark color="error">
+                              <v-toolbar-title>Warning !</v-toolbar-title>
+                            </v-toolbar>
             <v-card-title
-              class="text text-h4 red--text text--lighten-1 text-uppercase"
+              class="text-h5"
             >
-              Warning !
+              Are you sure you want to valide this Damages ?
             </v-card-title>
             <v-card-text class="font-weight-bold"
-              >Are you sure you want to valide this Damages ?</v-card-text
+              ></v-card-text
             >
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn color="red lighten-1" @click="dialogValide = false">
+              <v-btn color="white" @click="dialogValide = false">
                 No
               </v-btn>
               <v-btn color="primary" @click="validerDamages"> Yes </v-btn>
@@ -446,21 +449,26 @@ export default {
   },
   methods: {
     changeProfile_groupeSELECT() {
-      this.modelDamageIT.length = 0;
-      this.modelDamageTEC.length = 0;
-      this.equipmentsFiltre.length = 0;
+      this.modelDamageIT = [];
+      this.modelDamageTEC = [];
+      this.equipmentsFiltre = [];
       this.confirmedDamageTEC = [];
       this.confirmedDamageIT = [];
       this.damageTypesIT.length = 0;
       this.damageTypesTEC.length = 0;
       this.disabledEquipmentsFiltre = false;
-
+      var count = 0;
       console.log("equipments", this.equipments);
       this.equipments.map((item) => {
         if (item.profile_group_id == this.profile_groupe_id) {
           this.equipmentsFiltre.push(item);
+          count++;
         }
       });
+      if(count == 0) {
+        this.equipmentsFiltre= [];
+      };
+
     },
     changeEquipmentsFiltreSELECT() {
       var IT = this.departmentIT.id;
@@ -566,7 +574,7 @@ export default {
     },
 
     cancel() {
-      this.damagesend.pop();
+      
       this.dialog = false;
     },
     dialogValideFunction() {
@@ -574,7 +582,11 @@ export default {
   
     },
     validerDamages() {
+      console.log("this.modelTEC",this.modelTEC);
+      console.log("this.modelIT",this.modelIT);
       this.declareDamageAction(this.Data).then(() => {
+        this.modelTEC=[] ;
+        this.modelIT=[] ;
         console.log("validerDamages");
         this.Data = [];
         var IT = this.departmentIT.id;
@@ -603,7 +615,7 @@ export default {
         })
 
   
-
+        this.damageSelect=[];
         this.dialogValide = false;
       });
     },

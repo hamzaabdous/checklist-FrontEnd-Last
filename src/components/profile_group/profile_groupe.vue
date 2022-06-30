@@ -12,7 +12,7 @@
           <v-toolbar-title>Equipments Utilisation Profile :</v-toolbar-title>
           <v-divider class="mx-4" inset vertical></v-divider>
           <v-spacer></v-spacer>
-          <v-dialog v-model="dialog" max-width="500px">
+          <v-dialog v-model="dialog" max-width="600px">
             <template v-slot:activator="{ on, attrs }">
               <v-btn
                 color="#1D4F91"
@@ -34,6 +34,7 @@
                   <v-row>
                     <v-col cols="12" sm="6" md="6">
                       <v-text-field
+                        outlined
                         v-model="editedItem.name"
                         label="name"
                       ></v-text-field>
@@ -41,6 +42,7 @@
                     <v-col cols="12" sm="6" md="6">
                       <v-select
                         :items="departments"
+                        outlined
                         item-text="name"
                         item-value="id"
                         v-model="editedItem.department_id"
@@ -54,8 +56,8 @@
               <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn
-                  color="#1D4F91"
-                  class="mb-2 btn white--text"
+                  color="#ffff"
+                  class="mb-2 btn "
                   @click="close(item)"
                 >
                   Cancel
@@ -70,16 +72,19 @@
               </v-card-actions>
             </v-card>
           </v-dialog>
-          <v-dialog v-model="dialogDelete" max-width="500px">
+          <v-dialog v-model="dialogDelete" max-width="600px">
             <v-card>
-              <v-card-title class="text-h5"
-                >Are you sure you want to delete this item?</v-card-title
+               <v-toolbar dark color="error" >
+                <v-toolbar-title>Warning !</v-toolbar-title>
+              </v-toolbar>
+              <v-card-title  class="text-h5"
+                >Are you sure you want to Delete this Profilegroup?</v-card-title
               >
               <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn
-                  color="#1D4F91"
-                  class="mb-2 btn white--text"
+                  color="#fff"
+                  class="mb-2 btn black--text"
                   @click="closeDelete"
                   >Cancel</v-btn
                 >
@@ -95,17 +100,28 @@
           </v-dialog>
           <v-dialog v-model="confirmAddSave" max-width="500px">
             <v-card>
-              <v-card-title class="text-h5" v-if="editedIndex == -1"
-                >Are you sure you want to add this item?</v-card-title
+              <div v-if="editedIndex == -1">
+                <v-toolbar dark color="error" >
+                <v-toolbar-title>Warning !</v-toolbar-title>
+              </v-toolbar>
+              <v-card-title  class="text-h5"
+                >Are you sure you want to add this Profilegroup?</v-card-title
               >
-              <v-card-title class="text-h5" v-else
-                >Are you sure you want to update this item?</v-card-title
+              </div>
+              <div v-else>
+                <v-toolbar dark color="error" >
+                <v-toolbar-title>Warning !</v-toolbar-title>
+              </v-toolbar>
+              <v-card-title class="text-h5"
+                >Are you sure you want to update this Profilegroup?</v-card-title
               >
+              </div>
+              
               <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn
-                  color="#1D4F91"
-                  class="mb-2 btn white--text"
+                  color="#ffff"
+                  class="mb-2 btn"
                   @click="closeAddSaveDialog"
                   >No</v-btn
                 >
@@ -159,13 +175,10 @@
 
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn
-                  color="#1D4F91"
-                  class="mb-2 btn white--text"
-                  @click="closedialogView"
+
+                <v-btn depressed color="" @click="closedialogView"
+                  >Cancel</v-btn
                 >
-                  Cancel
-                </v-btn>
               </v-card-actions>
             </v-card>
           </v-dialog>
@@ -247,13 +260,13 @@ export default {
   },
   computed: {
     formTitle() {
-      return this.editedIndex === -1 ? "New Item" : "Edit Item";
+      return this.editedIndex === -1 ? "New Profilegroups" : "Edit Profilegroups";
     },
     ...mapGetters(["getprofilegroups", "getdepartements"]),
   },
   watch: {
     dialog(val) {
-      if (this.editedIndex == -1) {
+      if (!val) {
         this.editedIndex = -1;
         this.editedItem = {
           id: "",

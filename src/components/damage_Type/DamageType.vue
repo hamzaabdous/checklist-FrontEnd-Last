@@ -61,8 +61,8 @@
 
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn depressed color="" @click="close"> Cancel </v-btn>
-                <v-btn depressed color="primary" @click="openSave">
+                <v-btn  color="" @click="close"> Cancel </v-btn>
+                <v-btn  color="primary" @click="openSave">
                   Save
                 </v-btn>
               </v-card-actions>
@@ -88,20 +88,31 @@
               </v-card-actions>
             </v-card>
           </v-dialog>
-          <v-dialog v-model="confirmAddSave" max-width="500px">
+          <v-dialog v-model="confirmAddSave" max-width="600px">
             <v-card>
-              <v-card-title class="text-h5" v-if="editedIndex == -1"
-                >Are you sure you want to add this item?</v-card-title
+              <div v-if="editedIndex == -1">
+                <v-toolbar dark color="error" >
+                <v-toolbar-title>Warning !</v-toolbar-title>
+              </v-toolbar>
+              <v-card-title  class="text-h5"
+                >Are you sure you want to add this DamageType?</v-card-title
               >
-              <v-card-title class="text-h5" v-else
-                >Are you sure you want to update this item?</v-card-title
+              </div>
+              <div v-else>
+                <v-toolbar dark color="error" >
+                <v-toolbar-title>Warning !</v-toolbar-title>
+              </v-toolbar>
+              <v-card-title class="text-h5"
+                >Are you sure you want to update this DamageType?</v-card-title
               >
+              </div>
+            
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" text @click="closeAddSaveDialog"
+                <v-btn   @click="closeAddSaveDialog"
                   >No</v-btn
                 >
-                <v-btn color="blue darken-1" text @click="save">Yes</v-btn>
+                <v-btn color="primary"  @click="save">Yes</v-btn>
                 <v-spacer></v-spacer>
               </v-card-actions>
             </v-card>
@@ -109,13 +120,13 @@
         </v-toolbar>
       </template>
       <template v-slot:[`item.actions`]="{ item }">
-        <v-btn color="primary" class="m-2 mr-2 btn white--text">
-          <v-icon medium class="mr-2" @click="editItem(item)">
+        <v-btn color="primary" @click="editItem(item)" class="m-2 mr-2 btn white--text">
+          <v-icon medium class="mr-2" >
             mdi-pencil
           </v-icon>
         </v-btn>
-        <v-btn color="#f45" class="m-2 btn white--text">
-          <v-icon medium @click="deleteItem(item)"> mdi-delete </v-icon>
+        <v-btn color="#f45" @click="deleteItem(item)" class="m-2 btn white--text">
+          <v-icon medium > mdi-delete </v-icon>
         </v-btn>
       </template>
       <template v-slot:no-data>
@@ -179,9 +190,18 @@ export default {
           department_id: "",
         };
       }
+      
       val || this.close();
     },
     dialogDelete(val) {
+      if (this.editedIndex == -1) {
+        this.editedIndex = -1;
+        this.editedItem = {
+          name: "",
+          profile_group_id: "",
+          department_id: "",
+        };
+      }
       val || this.closeDelete();
     },
   },

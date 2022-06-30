@@ -193,6 +193,22 @@
               </v-card-actions>
             </v-card>
           </v-dialog>
+          <v-dialog v-model="dialogclose" max-width="700px">
+            <v-card>
+              <v-toolbar dark color="error">
+                <v-toolbar-title>Warning !</v-toolbar-title>
+              </v-toolbar>
+              <v-card-title class="text-h5"
+                >Are you sure you want to close this damage ?</v-card-title
+              >
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="" @click="dialogclose = false">Cancel</v-btn>
+                <v-btn color="primary" @click="closed">OK</v-btn>
+                <v-spacer></v-spacer>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
           <v-dialog v-model="dialogDelete" max-width="600px">
             <v-card>
               <v-toolbar dark color="error">
@@ -258,6 +274,34 @@
                             <h4 v-else>{{ damageSelect.status }}</h4>
                           </td>
                         </tr>
+
+                        <tr>
+                          <td><h3>Profile Group</h3></td>
+                          <td class="valueColumn">
+                            <h5
+                              v-if="
+                                damageSelect.equipment.profile_group.name ==
+                                null
+                              "
+                            >
+                              Empty
+                            </h5>
+
+                            <h4 v-else>
+                              {{ damageSelect.equipment.profile_group.name }}
+                            </h4>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td><h3>Equipment</h3></td>
+                          <td class="valueColumn">
+                            <h5 v-if="damageSelect.equipment.name == null">
+                              Empty
+                            </h5>
+
+                            <h4 v-else>{{ damageSelect.equipment.name }}</h4>
+                          </td>
+                        </tr>
                         <tr>
                           <td><h3>Declared At</h3></td>
                           <td class="valueColumn">
@@ -269,11 +313,81 @@
                           </td>
                         </tr>
                         <tr>
+                          <td><h3>Declared By</h3></td>
+                          <td class="valueColumn">
+                            <h5
+                              v-if="damageSelect.declared_by.username == null"
+                            >
+                              Empty
+                            </h5>
+
+                            <h4 v-else>
+                              {{ damageSelect.declared_by.username }}
+                            </h4>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td><h3>Confirmed At</h3></td>
+                          <td class="valueColumn">
+                            <h5 v-if="damageSelect.confirmedAt == null">
+                              Empty
+                            </h5>
+
+                            <h4 v-else>{{ damageSelect.confirmedAt }}</h4>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td><h3>Resolve Description</h3></td>
+                          <td class="valueColumn">
+                            <h5 v-if="damageSelect.resolveDescription == null">
+                              Empty
+                            </h5>
+
+                            <h4 v-else>
+                              {{ damageSelect.resolveDescription }}
+                            </h4>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td><h3>Confirmed By</h3></td>
+                          <td class="valueColumn">
+                            <h5 v-if="damageSelect.confirmed_by == null">
+                              Empty
+                            </h5>
+
+                            <h4 v-else>
+                              {{ damageSelect.confirmed_by.username }}
+                            </h4>
+                          </td>
+                        </tr>
+                        <tr>
                           <td><h3>Closed At</h3></td>
                           <td class="valueColumn">
                             <h5 v-if="damageSelect.closedAt == null">Empty</h5>
 
                             <h4 v-else>{{ damageSelect.closedAt }}</h4>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td><h3>Reverted By</h3></td>
+                          <td class="valueColumn">
+                            <h5 v-if="damageSelect.reverted_by == null">
+                              Empty
+                            </h5>
+
+                            <h4 v-else>
+                              {{ damageSelect.reverted_by.username }}
+                            </h4>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td><h3>reverted At</h3></td>
+                          <td class="valueColumn">
+                            <h5 v-if="damageSelect.revertedAt == null">
+                              Empty
+                            </h5>
+
+                            <h4 v-else>{{ damageSelect.revertedAt }}</h4>
                           </td>
                         </tr>
                         <tr>
@@ -287,6 +401,18 @@
                           </td>
                         </tr>
                         <tr>
+                          <td><h3>Reverted Description</h3></td>
+                          <td class="valueColumn">
+                            <h5 v-if="damageSelect.revertedDescription == null">
+                              Empty
+                            </h5>
+
+                            <h4 v-else>
+                              {{ damageSelect.revertedDescription }}
+                            </h4>
+                          </td>
+                        </tr>
+                        <tr>
                           <td><h3>Updated at</h3></td>
                           <td class="valueColumn">
                             <h5 v-if="damageSelect.updated_at == null">
@@ -296,6 +422,7 @@
                             <h4 v-else>{{ damageSelect.updated_at }}</h4>
                           </td>
                         </tr>
+
                         <tr>
                           <td><h3>Created at</h3></td>
                           <td class="valueColumn">
@@ -304,6 +431,25 @@
                             </h5>
 
                             <h4 v-else>{{ damageSelect.created_at }}</h4>
+                          </td>
+                        </tr>
+
+                        <tr>
+                          <td><h3>driver In</h3></td>
+                          <td class="valueColumn">
+                            <h5 v-if="damageSelect.driverIn == null">Empty</h5>
+
+                            <h4 v-else>{{ damageSelect.driverIn.username }}</h4>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td><h3>driver Out</h3></td>
+                          <td class="valueColumn">
+                            <h5 v-if="damageSelect.driverOut == null">Empty</h5>
+
+                            <h4 v-else>
+                              {{ damageSelect.driverOut.username }}
+                            </h4>
                           </td>
                         </tr>
                       </tbody>
@@ -357,13 +503,13 @@
               </v-container>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn depressed color="primary" @click="opendialogresolve">
+                <v-btn color="primary" @click="opendialogresolve">
                   Confirme damage
                 </v-btn>
-                <v-btn depressed color="red" @click="closed">
+                <v-btn color="red" @click="dialogclose = true">
                   Close damage
                 </v-btn>
-                <v-btn depressed color="red" @click="opendialogreverted">
+                <v-btn color="red" @click="opendialogreverted">
                   Revert damage
                 </v-btn>
               </v-card-actions>
@@ -381,10 +527,7 @@
               </v-btn>
               <v-toolbar-title>Picture</v-toolbar-title>
               <v-spacer></v-spacer>
-              <v-btn
-                class="mr-2 white--text"
-                color="red"
-              >
+              <v-btn class="mr-2 white--text" color="red">
                 <v-icon medium class="mr-2">mdi-folder-image</v-icon>
                 <a
                   :href="`http://localhost:8000/storage/cdn/damagePhotos/${PhotoShow.filename}`"
@@ -450,6 +593,7 @@ export default {
     loading: false,
     dialogimage: false,
     dialogresolve: false,
+    dialogclose: false,
     dialogreverted: false,
     dialogDelete: false,
     dialogimageShow: false,
@@ -458,7 +602,6 @@ export default {
       { text: "name", value: "damage_type.name", sortable: true },
       { text: "Status", value: "status", sortable: true },
       { text: "Created By", value: "declared_by.username", sortable: true },
-      { text: "Closed By", value: "closed_by.name", sortable: true },
       { text: "Created At", value: "created_at", sortable: true },
       { text: "Actions", value: "actions", sortable: false },
     ],
@@ -707,23 +850,68 @@ export default {
       this.confirmDamage.id = this.damageSelect.id;
       this.confirmDamage.confirmedBy_id = this.getUserActive.user.id;
 
-      this.confirmDamageAction(this.confirmDamage).then(() => {});
+      this.confirmDamageAction(this.confirmDamage).then((resolve) => {
+        this.damageByEquipments = this.damageByEquipments.map((item) => {
+          if (item.id == resolve.id) {
+            // resolve.confirmed_by=resolve.confirmedBy;
+            return resolve;
+          }
+          return item;
+        });
+        this.damageSelect.resolveDescription =
+          this.confirmDamage.resolveDescription;
+        this.confirmDamage.id = null;
+        this.confirmDamage.confirmedBy_id = null;
+        this.confirmDamage.resolveDescription = "";
+      });
+      setTimeout(() => {
+        this.counters();
+      }, 2000);
       this.showdetails = false;
       this.dialogresolve = false;
-
     },
     closed() {
       this.closeDamage.id = this.damageSelect.id;
       this.closeDamage.closedBy_id = this.getUserActive.user.id;
 
-      this.closeDamageAction(this.closeDamage).then(() => {});
+      this.closeDamageAction(this.closeDamage).then((resolve) => {
+        this.damageByEquipments = this.damageByEquipments.map((item) => {
+          if (item.id == resolve.id) {
+            // resolve.confirmed_by=resolve.confirmedBy;
+            return resolve;
+          }
+          return item;
+        });
+        this.closeDamage.id = null;
+        this.closeDamage.closedBy_id = null;
+      });
+      setTimeout(() => {
+        this.counters();
+      }, 2000);
+      this.dialogclose = false;
       this.showdetails = false;
     },
     revert() {
       this.revertDamage.id = this.damageSelect.id;
       this.revertDamage.revertedBy_id = this.getUserActive.user.id;
 
-      this.revertDamageAction(this.revertDamage).then(() => {});
+      this.revertDamageAction(this.revertDamage).then((resolve) => {
+        this.damageByEquipments = this.damageByEquipments.map((item) => {
+          if (item.id == resolve.id) {
+            // resolve.confirmed_by=resolve.confirmedBy;
+            return resolve;
+          }
+          return item;
+        });
+        this.damageSelect.revertedDescription =
+          this.revertDamage.revertedDescription;
+        this.revertDamage.id = null;
+        this.revertDamage.revertedBy_id = null;
+        this.revertDamage.revertedDescription = "";
+      });
+      setTimeout(() => {
+        this.counters();
+      }, 2000);
       this.showdetails = false;
       this.dialogreverted = false;
     },
@@ -733,12 +921,29 @@ export default {
           return e.id != this.Damagedelete.id;
         });
       });
+      setTimeout(() => {
+        this.counters();
+      }, 2000);
       this.dialogDelete = false;
     },
     showImage(item) {
       console.log("image click", item);
       this.PhotoShow = item;
       this.dialogimageShow = true;
+    },
+    counters() {
+      this.getEquipmentsByCounterAction(this.idEquipment).then(() => {
+        this.EquipmentsByCounter.id = this.getEquipmentsByCounter.id;
+        this.EquipmentsByCounter.nameEquipment =
+          this.getEquipmentsByCounter.nameEquipment;
+
+        this.EquipmentsByCounter.damagedCount =
+          this.getEquipmentsByCounter.damagedCount;
+        this.EquipmentsByCounter.confirmedCount =
+          this.getEquipmentsByCounter.confirmedCount;
+        this.EquipmentsByCounter.closedCount =
+          this.getEquipmentsByCounter.closedCount;
+      });
     },
     sendImage() {
       this.photo.foreman_id = this.getUserActive.user.id;
@@ -756,8 +961,16 @@ export default {
       );
 
       console.log("this.photo", this.photo);
-      this.sendDamagePhotosStoragePathAction(formData).then(() => {
-        // this.foremanIntervention = [...this.sendDamagePhotosStoragePath];
+      this.sendDamagePhotosStoragePathAction(formData).then((resolve) => {
+        this.damageByEquipments = this.damageByEquipments.map((c) => {
+        if (c.id == resolve.id){
+          this.damageSelect.photos=resolve.photos;
+          this.damageSelect.description=resolve.description;
+          c.photos=resolve.photos;
+          c.description=resolve.description;
+        }
+        return c;
+      }); 
         console.log("done");
       });
       this.dialogimage = false;
