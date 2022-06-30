@@ -711,7 +711,6 @@ export default {
       this.showdetails = false;
       this.dialogresolve = false;
 
-      this.dialog = false;
     },
     closed() {
       this.closeDamage.id = this.damageSelect.id;
@@ -719,7 +718,6 @@ export default {
 
       this.closeDamageAction(this.closeDamage).then(() => {});
       this.showdetails = false;
-      this.dialog = false;
     },
     revert() {
       this.revertDamage.id = this.damageSelect.id;
@@ -728,7 +726,6 @@ export default {
       this.revertDamageAction(this.revertDamage).then(() => {});
       this.showdetails = false;
       this.dialogreverted = false;
-      this.dialog = false;
     },
     deleteDamage() {
       this.deleteDAMAGEAction(this.Damagedelete).then(() => {

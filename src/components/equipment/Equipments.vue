@@ -184,6 +184,7 @@ export default {
           return e.id != this.editedItem.id;
         });
       });
+      this.editedIndex =-1;
       this.closeDelete();
     },
     close() {
