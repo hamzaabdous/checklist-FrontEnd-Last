@@ -11,9 +11,17 @@ import technique from "../components/technique/technique.vue";
 import techniqueView from "../components/technique/techniqueView.vue";
 import techniqueEquipment from "../components/technique/techniqueEquipment.vue";
 import Dashboard from "../components/dashboard/Dashboard.vue";
+import Login from "../View/Login.vue";
 Vue.use(VueRouter);
 
 const routes = [
+  {
+    path: "/Login",
+    name: "Login",
+    component: Login,
+    params: true,
+
+  },
   {
     path: "/user",
     name: "user",

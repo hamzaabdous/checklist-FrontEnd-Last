@@ -1,7 +1,7 @@
 <template>
   <v-card v-if="logged" class="mx-auto overflow-hidden">
     <v-app-bar color="#fff" style="border-bottom: 2px solid #002f6c">
-      <v-app-bar-nav-icon @click="drawer = true"></v-app-bar-nav-icon>
+      <v-app-bar-nav-icon v-if="this.fonction != 'driver'" @click="drawer = true"></v-app-bar-nav-icon>
       <v-toolbar-title>
         <v-img
           contain
@@ -34,28 +34,40 @@
             max-width="250"
             src="./assets/TangerAlliance.png"
           ></v-img>
-          <v-list>
-            <v-list-item
-              v-for="item in listDrawerChildRouter"
-              :key="item.id"
-              link
-              :to="item.ROUTE"
-              class="sideBarItem"
-            >
-              <v-list-item class="test">
-                <v-list-item-content>
-                  <h4>{{ item.name }}</h4>
-                </v-list-item-content>
-                <template v-slot:activator>
-                  <v-list-item-content>
-                    <v-list-item-title>
-                      <h1 class="header">{{ item.name }}</h1>
-                    </v-list-item-title>
-                  </v-list-item-content>
-                </template>
-              </v-list-item>
-            </v-list-item>
-          </v-list>
+
+          <div
+            v-if="this.fonction == 'technique' || this.fonction == 'foreman'"
+            class="foremanandTechnique"
+          >
+            <div class="itemdrawer">
+              <router-link class="itemd" to="/technique">Technique</router-link>
+            </div>
+          </div>
+          <div
+            v-if="this.fonction == 'driver' "
+            class="foremanandTechnique"
+          >
+            <div class="itemdrawer">
+              <router-link class="itemd" to="/Damage">Damage</router-link>
+            </div>
+          </div>
+
+          <div v-if="this.fonction == 'admin' || this.fonction == 'adminIT'" class="admin">
+            <div class="itemdrawer">
+              <router-link class="itemd" to="/userGestion"
+                >Gestion Users</router-link
+              >
+            </div>
+
+            <div class="itemdrawer">
+              <router-link class="itemd" to="/profile_groupe"
+                >Equipment Profile</router-link
+              >
+            </div>
+            <div class="itemdrawer">
+              <router-link class="itemd" to="/technique">Technique</router-link>
+            </div>
+          </div>
         </v-list-item-group>
       </v-list>
     </v-navigation-drawer>
@@ -77,6 +89,7 @@ export default {
     return {
       drawer: false,
       logged: false,
+      fonction: "",
       listDrawerChildRouter: [
         { id: 1, name: "User", ROUTE: "/userGestion" },
         { id: 2, name: "Damage", ROUTE: "/Damage" },
@@ -87,19 +100,24 @@ export default {
     };
   },
   mounted() {
-    document.title = "Dashboard";
-    if (localStorage.getItem("token") == null) {
+    if (this.getUserActive == null) {
+      this.logged = false;
+    } else if (this.getUserActive != null) {
+      this.fonction = this.getUserActive.fonction.name;
       this.logged = true;
-    } else if (localStorage.getItem("token") != null) this.logged = true;
+    }
   },
   computed: {
-    ...mapGetters(["getUsers"]),
+    ...mapGetters(["getUsers", "getUserActive"]),
   },
   watch: {},
   methods: {
     initialize() {},
     logout() {
-      localStorage.removeItem("token");
+      localStorage.clear();
+      this.$router.push({
+        name: "Login",
+      });
       window.location.reload();
     },
     ...mapActions([]),

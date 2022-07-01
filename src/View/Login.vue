@@ -86,13 +86,38 @@ export default {
     Login() {
       console.log("username", this.username);
       console.log("password", this.password);
-
-      this.userActive = this.getUserActive;
-      /* localStorage.removeItem("userActive");
-      localStorage.setItem('userActive', JSON.stringify(this.userActive)); */
+      var userLogin = {
+        username: this.username,
+        password: this.password,
+      };
       console.log("this.userActive", this.userActive);
-
-      CustomizedAxios.post("users/login", {
+      this.LoginAction(userLogin).then((resolve) => {
+        console.log("user login", resolve);
+        if (resolve.user.fonction.name == "technique") {
+          this.$router.push({
+            name: "technique",
+          });
+          window.location.reload();
+        } else if (resolve.user.fonction.name == "foreman") {
+          this.$router.push({
+            name: "technique",
+          });
+          window.location.reload();
+        }
+        else if (resolve.user.fonction.name == "driver") {
+          this.$router.push({
+            name: "Damage",
+          });
+          window.location.reload();
+        }
+        else{
+           this.$router.push({
+            name: "userGestion",
+          });
+          window.location.reload();
+        }
+      });
+      /*  CustomizedAxios.post("users/login", {
         username: this.username,
         password: this.password,
       })
@@ -117,12 +142,12 @@ export default {
         })
         .catch((error) => {
           console.log("error login ", error);
-        });
+        }); */
     },
     ...mapActions([
       "setUsersAction",
       "editUserAction",
-      "deleteUserAction",
+      "LoginAction",
       "addUserAction2",
     ]),
   },

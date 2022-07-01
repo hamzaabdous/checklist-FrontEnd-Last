@@ -69,8 +69,6 @@
   border-radius: 8px;
 }
 
-.login {
-}
 .backgroundLogin {
   padding: 0px;
   height: 106vh;
@@ -154,9 +152,40 @@
   border-radius: 5px;
   background: #2ba7ff67;
   -webkit-box-shadow: 11px 11px 19px #bdbdbd, -11px -11px 19px #ffffff;
-box-shadow: 11px 11px 19px #bdbdbd, -11px -11px 19px #ffffff;
+  box-shadow: 11px 11px 19px #bdbdbd, -11px -11px 19px #ffffff;
 }
 .imageRadius {
   border: 2px solid #000;
   border-radius: 5px;
+}
+
+.itemdrawer {
+  background-color: #eef9ffc4;
+  text-align: center;
+  padding: 10px;
+  border: 1px solid #000;
+  margin: 10px;
+  border-radius: 5px;
+  .itemd {
+    text-decoration: none;
+
+    color: black;
+    font-size: larger;
+    font-weight: bold;
+    font-family: "Roboto";
+  }
+}
+.itemdrawer:hover {
+  background-color: #fff;
+  margin-right: 2px;
+  margin-left: 2px;
+
+  .itemd {
+    color: rgba(0, 143, 245, 0.89);
+    text-decoration: none;
+    color: 40px;
+    font-size: larger;
+    font-weight: bold;
+    font-family: "Roboto";
+  }
 }

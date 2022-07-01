@@ -28,11 +28,9 @@
         <v-dialog v-model="dialog" persistent max-width="600px">
           <v-card>
             <v-toolbar dark color="error">
-                              <v-toolbar-title>Warning !</v-toolbar-title>
-                            </v-toolbar>
-            <v-card-title
-              class="text-h5"
-            >
+              <v-toolbar-title>Warning !</v-toolbar-title>
+            </v-toolbar>
+            <v-card-title class="text-h5">
               Are you sure you want to valide this Damages ?
             </v-card-title>
             <v-card-actions>
@@ -45,22 +43,16 @@
         <v-dialog v-model="dialogValide" persistent max-width="600px">
           <v-card>
             <v-toolbar dark color="error">
-                              <v-toolbar-title>Warning !</v-toolbar-title>
-                            </v-toolbar>
-            <v-card-title
-              class="text-h5"
-            >
+              <v-toolbar-title>Warning !</v-toolbar-title>
+            </v-toolbar>
+            <v-card-title class="text-h5">
               Are you sure you want to valide this Damages ?
             </v-card-title>
-            <v-card-text class="font-weight-bold"
-              ></v-card-text
-            >
+            <v-card-text class="font-weight-bold"></v-card-text>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn color="white" @click="dialogValide = false">
-                No
-              </v-btn>
-              <v-btn color="primary" @click="validerDamages"> Yes </v-btn>
+              <v-btn color="white" @click="cancelvalide()"> No </v-btn>
+              <v-btn color="primary" @click="valider()"> Yes </v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -143,7 +135,7 @@
                         v-for="(item, i) in damageTypesIT"
                         :key="i"
                         class="item"
-                        @click="valider(item)"
+                        @click="dialogValideFunction(item,i)"
                       >
                         <v-list-item-icon>
                           <v-icon> mdi-cellphone-link-off</v-icon>
@@ -239,7 +231,7 @@
                         v-for="(item, i) in damageTypesTEC"
                         :key="i"
                         class="item"
-                        @click="valider(item)"
+                        @click="dialogValideFunction(item)"
                       >
                         <v-list-item-icon>
                           <v-icon>mdi-car-wrench</v-icon>
@@ -262,7 +254,7 @@
         <v-container>
           <v-row>
             <v-col class="d-flex justify-center" cols="12">
-              <v-btn depressed color="primary" @click="dialogValideFunction">
+              <v-btn depressed color="primary" @click="validerDamages">
                 Valider
               </v-btn>
             </v-col>
@@ -286,6 +278,14 @@ export default {
     confirmedDamageIT: [],
     equipmentsFiltre: [],
     Data: [],
+    damageCourent: {
+      declaredBy_id: null,
+      equipment_id: null,
+      damage_type_id: null,
+    },
+    damage_type_id: null,
+    modelIT_id_Courent: null,
+    modelTEC_id_Courent: null,
     profile_groupe: [],
     equipments: [],
     damagesend: [],
@@ -465,10 +465,9 @@ export default {
           count++;
         }
       });
-      if(count == 0) {
-        this.equipmentsFiltre= [];
-      };
-
+      if (count == 0) {
+        this.equipmentsFiltre = [];
+      }
     },
     changeEquipmentsFiltreSELECT() {
       var IT = this.departmentIT.id;
@@ -555,48 +554,69 @@ export default {
       "setDepartementsAction",
     ]),
     valider(item) {
-      this.damageSelect.push(item);
       var Damage = {
         declaredBy_id: null,
         equipment_id: null,
         damage_type_id: null,
       };
-
-      Damage.declaredBy_id = this.getUserActive.user.id;
-      Damage.damage_type_id = item.id;
+      Damage.declaredBy_id = this.getUserActive.id;
+      Damage.damage_type_id = this.damage_type_id;
       Damage.equipment_id = this.equipments_id;
+
+      this.damageSelect.push(Damage);
 
       this.Data.push(Damage);
 
       console.log(this.Data);
 
-      this.dialog = true;
+      this.dialogValide = false;
     },
 
     cancel() {
-      
       this.dialog = false;
     },
-    dialogValideFunction() {
+    cancelvalide() {
+      if (this.Data.length == 0) {
+        this.dialogValide = false;
+      } else {
+        this.Data = this.Data.map((e) => {
+          if (e.damage_type_id != this.damage_type_id) {
+            return e;
+          }
+        });
+        this.dialogValide = false;
+        this.modelIT = this.modelIT.map((e) => {
+          if (e != this.modelIT_id_Courent) {
+            return e;
+          }
+        });
+        this.Data = this.Data.filter(function (element) {
+          return element !== undefined;
+        });
+      }
+    },
+    dialogValideFunction(item,i) {
+      this.damageCourent.declaredBy_id = this.getUserActive.id;
+      this.damageCourent.damage_type_id = item.id;
+      this.damageCourent.equipment_id = this.equipments_id;
+      this.damage_type_id = item.id;
+      this.modelIT_id_Courent=i;
       this.dialogValide = true;
-  
     },
     validerDamages() {
-      console.log("this.modelTEC",this.modelTEC);
-      console.log("this.modelIT",this.modelIT);
+      console.log("this.modelTEC", this.modelTEC);
+      console.log("this.modelIT", this.modelIT);
       this.declareDamageAction(this.Data).then(() => {
-        this.modelTEC=[] ;
-        this.modelIT=[] ;
+        this.modelTEC = [];
+        this.modelIT = [];
         console.log("validerDamages");
-        this.Data = [];
         var IT = this.departmentIT.id;
         var TEC = this.departmentTEC.id;
 
-        this.damageSelect.map((item) => {
-
+        /* this.Data.map((item) => {
           if (item.department_id == IT) {
             item.damage = this.DamageSelect;
-  
+
             item.damage.status = "on progress";
             this.modelDamageIT.push(item);
             this.damageTypesIT = this.damageTypesIT.filter((e) => {
@@ -612,10 +632,12 @@ export default {
             });
             this.modelTEC = [];
           }
-        })
+        }); */
 
-  
-        this.damageSelect=[];
+        this.Data = [];
+
+        this.damageSelect = [];
+        this.changeEquipmentsFiltreSELECT();
         this.dialogValide = false;
       });
     },

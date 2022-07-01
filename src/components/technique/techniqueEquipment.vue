@@ -237,7 +237,7 @@
                 </v-btn>
                 <v-toolbar-title>Settings</v-toolbar-title>
                 <v-spacer></v-spacer>
-                <v-btn color="blue-grey" @click="dialogimage = true">
+                <v-btn v-if="fonction == 'foreman'" color="blue-grey" @click="dialogimage = true">
                   <v-icon color="white" medium> mdi-camera </v-icon>
                   Add pictures
                 </v-btn>
@@ -503,15 +503,16 @@
               </v-container>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="primary" @click="opendialogresolve">
+                <v-btn v-if="fonction == 'technique' && damageSelect.status =='on progress'" color="primary" @click="opendialogresolve">
                   Confirme damage
                 </v-btn>
-                <v-btn color="red" @click="dialogclose = true">
-                  Close damage
-                </v-btn>
-                <v-btn color="red" @click="opendialogreverted">
+                <v-btn v-if="fonction == 'foreman' && damageSelect.status =='confirmed'"  color="error" @click="opendialogreverted">
                   Revert damage
                 </v-btn>
+                <v-btn v-if="fonction == 'foreman' && damageSelect.status =='confirmed'"  color="primary" @click="dialogclose = true">
+                  Close damage
+                </v-btn>
+                
               </v-card-actions>
             </v-card>
           </v-dialog>
@@ -598,6 +599,7 @@ export default {
     dialogDelete: false,
     dialogimageShow: false,
     search: "",
+    fonction:"",
     headers: [
       { text: "name", value: "damage_type.name", sortable: true },
       { text: "Status", value: "status", sortable: true },
@@ -766,6 +768,7 @@ export default {
   mounted() {
     document.title = "user";
     this.loading = true;
+    this.fonction = this.getUserActive.fonction.name;
     setTimeout(() => {
       this.initialize();
       this.loading = false;
@@ -848,7 +851,7 @@ export default {
     },
     confirmed() {
       this.confirmDamage.id = this.damageSelect.id;
-      this.confirmDamage.confirmedBy_id = this.getUserActive.user.id;
+      this.confirmDamage.confirmedBy_id = this.getUserActive.id;
 
       this.confirmDamageAction(this.confirmDamage).then((resolve) => {
         this.damageByEquipments = this.damageByEquipments.map((item) => {
@@ -860,6 +863,8 @@ export default {
         });
         this.damageSelect.resolveDescription =
           this.confirmDamage.resolveDescription;
+          this.damageSelect.status =
+          this.confirmDamage.status;
         this.confirmDamage.id = null;
         this.confirmDamage.confirmedBy_id = null;
         this.confirmDamage.resolveDescription = "";
@@ -872,7 +877,7 @@ export default {
     },
     closed() {
       this.closeDamage.id = this.damageSelect.id;
-      this.closeDamage.closedBy_id = this.getUserActive.user.id;
+      this.closeDamage.closedBy_id = this.getUserActive.id;
 
       this.closeDamageAction(this.closeDamage).then((resolve) => {
         this.damageByEquipments = this.damageByEquipments.map((item) => {
@@ -893,7 +898,7 @@ export default {
     },
     revert() {
       this.revertDamage.id = this.damageSelect.id;
-      this.revertDamage.revertedBy_id = this.getUserActive.user.id;
+      this.revertDamage.revertedBy_id = this.getUserActive.id;
 
       this.revertDamageAction(this.revertDamage).then((resolve) => {
         this.damageByEquipments = this.damageByEquipments.map((item) => {
@@ -946,7 +951,7 @@ export default {
       });
     },
     sendImage() {
-      this.photo.foreman_id = this.getUserActive.user.id;
+      this.photo.foreman_id = this.getUserActive.id;
 
       var formData = new FormData();
       formData.append("id", parseFloat(this.photo.id));
